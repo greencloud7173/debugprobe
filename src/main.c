@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ws2812.h"
+
 #if PICO_SDK_VERSION_MAJOR >= 2
 #include "bsp/board_api.h"
 #else
@@ -64,6 +66,8 @@ static uint8_t RxDataBuffer[CFG_TUD_HID_EP_BUFSIZE];
 TaskHandle_t dap_taskhandle, tud_taskhandle, mon_taskhandle;
 
 static int was_configured;
+
+extern ws2812_instance_t single_led_board;
 
 void dev_mon(void *ptr)
 {
@@ -110,20 +114,22 @@ void tud_unmount_cb(void);
 
 void usb_thread(void *ptr)
 {
-  uint32_t cmd;
-#ifdef PROBE_USB_CONNECTED_LED
-    gpio_init(PROBE_USB_CONNECTED_LED);
-    gpio_set_dir(PROBE_USB_CONNECTED_LED, GPIO_OUT);
-#endif
+    uint32_t cmd;
+
     TickType_t wake;
     wake = xTaskGetTickCount();
     do {
         tud_task();
 #ifdef PROBE_USB_CONNECTED_LED
-        if (!gpio_get(PROBE_USB_CONNECTED_LED) && tud_ready())
-            gpio_put(PROBE_USB_CONNECTED_LED, 1);
-        else
-            gpio_put(PROBE_USB_CONNECTED_LED, 0);
+        // if (!gpio_get(PROBE_USB_CONNECTED_LED) && tud_ready())
+        //     gpio_put(PROBE_USB_CONNECTED_LED, 1);
+        // else
+        //     gpio_put(PROBE_USB_CONNECTED_LED, 0);
+
+      if (tud_ready())
+          ws2812_write_pixel_nonblocking(&single_led_board, 0x000d0008);
+      else
+          ws2812_write_pixel_nonblocking(&single_led_board, 0x0);
 #endif
         // implied bus-reset detection
         if (!tud_connected() && was_configured)

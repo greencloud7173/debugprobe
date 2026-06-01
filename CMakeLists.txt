@@ -25,6 +25,8 @@ add_executable(debugprobe
         src/sw_dp_pio.c
         src/tusb_edpt_handler.c
         src/autobaud.c
+    src/ws2812.c
+    src/ws2812.h
 )
 
 target_sources(debugprobe PRIVATE
@@ -46,6 +48,7 @@ target_compile_options(debugprobe PRIVATE -Wall)
 pico_generate_pio_header(debugprobe ${CMAKE_CURRENT_LIST_DIR}/src/probe.pio)
 pico_generate_pio_header(debugprobe ${CMAKE_CURRENT_LIST_DIR}/src/probe_oen.pio)
 pico_generate_pio_header(debugprobe ${CMAKE_CURRENT_LIST_DIR}/src/autobaud.pio)
+pico_generate_pio_header(debugprobe ${CMAKE_CURRENT_LIST_DIR}/src/ws2812.pio)
 
 target_include_directories(debugprobe PRIVATE src)
 

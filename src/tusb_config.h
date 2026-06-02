@@ -45,6 +45,10 @@
 #define CFG_TUSB_OS                 OPT_OS_PICO
 #endif
 
+#ifdef PICO_DEFAULT_LED_PIN
+#undef PICO_DEFAULT_LED_PIN
+#endif
+
 #ifndef CFG_TUSB_MEM_SECTION
 #define CFG_TUSB_MEM_SECTION
 #endif

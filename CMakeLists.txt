@@ -104,3 +104,5 @@ target_link_libraries(debugprobe PRIVATE
 pico_set_binary_type(debugprobe copy_to_ram)
 
 pico_add_extra_outputs(debugprobe)
+#
+#target_compile_options(debugprobe PRIVATE "-save-temps=obj")

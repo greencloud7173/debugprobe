@@ -34,7 +34,7 @@
 #include "ws2812.h"
 
 #if PICO_SDK_VERSION_MAJOR >= 2
-#include "bsp/board_api.h"
+#include "bsp/board_api.h"4
 #else
 #include "bsp/board.h"
 #endif
@@ -48,6 +48,7 @@
 #include "tusb_edpt_handler.h"
 #include "DAP.h"
 #include "hardware/structs/usb.h"
+#include "hardware/pio.h"
 
 // UART0 for debugprobe debug
 // UART1 for debugprobe to target device
@@ -62,6 +63,8 @@ static uint8_t RxDataBuffer[CFG_TUD_HID_EP_BUFSIZE];
 #define DAP_TASK_PRIO  (tskIDLE_PRIORITY + 1)
 
 #define AUTOBAUD_TASK_PRIO  (tskIDLE_PRIORITY + 1)
+
+ws2812_instance_t single_led_board;
 
 TaskHandle_t dap_taskhandle, tud_taskhandle, mon_taskhandle;
 
@@ -155,6 +158,11 @@ int main(void) {
     bi_decl_config();
 
     board_init();
+
+    if (!ws2812_init(&single_led_board, pio1, 16)) {
+      panic("ws2812 init failed\n");
+    }
+
     usb_serial_init();
     cdc_uart_init();
     tusb_init();

@@ -34,7 +34,7 @@
 #include "ws2812.h"
 
 #if PICO_SDK_VERSION_MAJOR >= 2
-#include "bsp/board_api.h"4
+#include "bsp/board_api.h"
 #else
 #include "bsp/board.h"
 #endif

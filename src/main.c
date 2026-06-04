@@ -70,8 +70,6 @@ TaskHandle_t dap_taskhandle, tud_taskhandle, mon_taskhandle;
 
 static int was_configured;
 
-extern ws2812_instance_t single_led_board;
-
 void dev_mon(void *ptr)
 {
     uint32_t sof[3];
